@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    # url for my database in my docker container (postgres the name of my DB)
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+
+  jpa:
+    database-platform: org.hibernate.dialect.PosgreSQLInnoDBDialect
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  # if we want to upload file on database
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+  mvc:
+    async:
+      request-timeout: 3600000
+server:
+  port: 8080
+  error:
+
+    #chosen path to see error
+    path: /user/error
+
+    #disable white page when an error is occured
+    whitelabel:
+      enabled: false
