@@ -38,6 +38,9 @@ public class NotesService {
         return myRepo.save(note);
     }
 
+    public Page<MyNote> getAllSelectedNotes(int page, int size) {
+        return myRepo.findAll(PageRequest.of(page, size));
+    }
     public List<MyNote> getAllNotes() {
         return myRepo.findAll();
     }
