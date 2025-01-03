@@ -38,5 +38,7 @@ public class NotesService {
         return myRepo.save(note);
     }
 
-
+    public List<MyNote> getAllNotes() {
+        return myRepo.findAll();
+    }
 }

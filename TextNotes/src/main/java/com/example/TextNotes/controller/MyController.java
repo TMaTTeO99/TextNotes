@@ -26,7 +26,11 @@ public class MyController {
         return ResponseEntity.created(URI.create("/notes/IDnotes")).body(notesService.createNote(note));
     }
 
-    
+
+    @GetMapping("/all")
+    public ResponseEntity<List<MyNote>> getAllNotes() {
+        return ResponseEntity.ok().body(notesService.getAllNotes());
+    }
 
     @ExceptionHandler(InvalidBodyException.class)
     public ResponseEntity<ErrorRespose> handleInvalidBodyException(InvalidBodyException e) {
