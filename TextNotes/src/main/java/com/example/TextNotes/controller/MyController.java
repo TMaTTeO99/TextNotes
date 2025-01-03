@@ -25,4 +25,11 @@ public class MyController {
     public ResponseEntity<MyNote> createNote(@RequestBody MyNote note) throws InvalidBodyException {
         return ResponseEntity.created(URI.create("/notes/IDnotes")).body(notesService.createNote(note));
     }
+
+    
+
+    @ExceptionHandler(InvalidBodyException.class)
+    public ResponseEntity<ErrorRespose> handleInvalidBodyException(InvalidBodyException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorRespose(e.getMessage(), 400, System.currentTimeMillis()));
+    }
 }
