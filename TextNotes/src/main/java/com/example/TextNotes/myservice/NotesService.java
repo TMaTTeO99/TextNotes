@@ -19,11 +19,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotesService {
 
+
     //variable to access to my repo
     private final MyRepo myRepo;
-
-
-
 
     public MyNote createNote(MyNote note) throws InvalidBodyException {
 
@@ -44,4 +42,17 @@ public class NotesService {
     public List<MyNote> getAllNotes() {
         return myRepo.findAll();
     }
+
+    public MyNote deleteNote(String id) throws InvalidBodyException {
+
+        if(!myRepo.existsById(id))
+            throw new InvalidBodyException("Resource Not Exist");
+
+        MyNote returnedNote = myRepo.findById(id).get();
+
+        myRepo.deleteById(id);
+        return returnedNote;
+    }
+
+
 }

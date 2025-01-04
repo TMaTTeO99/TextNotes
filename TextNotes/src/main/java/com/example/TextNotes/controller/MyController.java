@@ -37,9 +37,14 @@ public class MyController {
     public ResponseEntity<List<MyNote>> getAllNotes() {
         return ResponseEntity.ok().body(notesService.getAllNotes());
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MyNote> deleteNote(@PathVariable String id) throws InvalidBodyException {
+        return ResponseEntity.ok().body(notesService.deleteNote(id));
+    }
 
     @ExceptionHandler(InvalidBodyException.class)
     public ResponseEntity<ErrorRespose> handleInvalidBodyException(InvalidBodyException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorRespose(e.getMessage(), 400, System.currentTimeMillis()));
     }
+
 }
