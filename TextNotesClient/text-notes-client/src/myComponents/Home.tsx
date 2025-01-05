@@ -17,7 +17,6 @@ async function retrieveData(setDataState: React.Dispatch<React.SetStateAction<bo
                             setLoading: React.Dispatch<React.SetStateAction<boolean>>) {
 
   try {
-    console.log("okokok")
     var listOfNotes: NoteDataFromServer[] = await getAllNotes();
     setDataState(false);
     setData(listOfNotes);   
@@ -38,12 +37,12 @@ async function retrieveData(setDataState: React.Dispatch<React.SetStateAction<bo
 async function deleteNote (id: string, data: NoteDataFromServer[], setData: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>) {
 
   try {
-    
+
     const noteDeleted = await deleteNoteInServer(id);
     const updatedNotes = data.filter(note => note.id !== id);
     updatedNotes.forEach(n => console.log(n))
     setData(updatedNotes);
-    
+
   }
   catch(error) {
 
@@ -53,6 +52,9 @@ async function deleteNote (id: string, data: NoteDataFromServer[], setData: Reac
 
 }
 
+
+
+
 function Home() {
 
 
@@ -61,8 +63,9 @@ function Home() {
     const [data, setData] = useState<NoteDataFromServer[]>([]);
     const navigate = useNavigate();
    
-    
+
     useEffect(() => {
+      console.log("fatta")
       const doRetrieveData = async () => {
         await retrieveData(setDataState, setData, setLoading);
       }

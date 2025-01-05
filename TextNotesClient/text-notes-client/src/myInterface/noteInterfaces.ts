@@ -10,11 +10,11 @@ export interface NoteItemProps {
 }
 export interface NoteDataFromServer {
 
-    id: string,
-    title: string,
-    author: string,
-    date: string
-    content: string
+    id?: string | null,
+    title: string | null,
+    author?: string | null,
+    date?: string | null,
+    content: string | null,
 
 }
 export interface HomeNoteProps {

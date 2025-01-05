@@ -25,3 +25,20 @@ export async function deleteNoteInServer(id: string): Promise<NoteDataFromServer
     return data;
     
 }
+export async function addNewNoteInServer(note: NoteDataFromServer) {
+    
+    const resp = await fetch('http://localhost:8080/notes/addNote' , {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+        body: JSON.stringify(note)
+    });
+    if (!resp.ok){
+        throw new Error("ERROR: status: " + resp.status);
+    }
+    const data: NoteDataFromServer = await resp.json();
+    return data;
+
+}
