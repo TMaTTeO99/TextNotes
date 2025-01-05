@@ -1,11 +1,12 @@
 import '../style/HomeStyle.css'
 
 import SearchAppBar from './UpBarComponent'; 
-import {  Grid, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material'
+import {  Grid } from '@mui/material'
 import NoteItem from './NoteItem';
-import { NoteDataFromServer, HomeNoteProps } from '../myInterface/noteInterfaces';
+import { NoteDataFromServer } from '../myInterface/noteInterfaces';
 import { useEffect, useState} from 'react';
 import { getAllNotes, deleteNoteInServer} from '../httpService';
+import { useNavigate } from 'react-router-dom';
 
 
 /*
@@ -16,6 +17,7 @@ async function retrieveData(setDataState: React.Dispatch<React.SetStateAction<bo
                             setLoading: React.Dispatch<React.SetStateAction<boolean>>) {
 
   try {
+    console.log("okokok")
     var listOfNotes: NoteDataFromServer[] = await getAllNotes();
     setDataState(false);
     setData(listOfNotes);   
@@ -36,12 +38,12 @@ async function retrieveData(setDataState: React.Dispatch<React.SetStateAction<bo
 async function deleteNote (id: string, data: NoteDataFromServer[], setData: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>) {
 
   try {
-
+    
     const noteDeleted = await deleteNoteInServer(id);
     const updatedNotes = data.filter(note => note.id !== id);
     updatedNotes.forEach(n => console.log(n))
     setData(updatedNotes);
-
+    
   }
   catch(error) {
 
@@ -51,15 +53,15 @@ async function deleteNote (id: string, data: NoteDataFromServer[], setData: Reac
 
 }
 
-
 function Home() {
 
 
     const [loading, setLoading] = useState(true);
     const [dataState, setDataState] = useState(false);
     const [data, setData] = useState<NoteDataFromServer[]>([]);
+    const navigate = useNavigate();
+   
     
-
     useEffect(() => {
       const doRetrieveData = async () => {
         await retrieveData(setDataState, setData, setLoading);
@@ -73,12 +75,11 @@ function Home() {
     if(loading)return (<h1>Loading...</h1>);
     if(dataState)return (<h1>Impossibile recuperare i dati</h1>);
 
-
     return (
       <div className='homeContainer'>
           
         {/*Header Section*/}
-        <SearchAppBar />
+        <SearchAppBar goToAddPage={navigate} route='/addNote'/>
   
         {/*Grid with All Notes*/}
         <div className='homeGrid'>
@@ -96,8 +97,5 @@ function Home() {
       </div>
     );
     
-    
-
-   
 }
 export default Home

@@ -6,16 +6,10 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
-//import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
-
-//import { makeStyles } from '@mui/styles';
-//import { useState } from 'react';
-//import { Drawer } from '@mui/material';
-//import {List} from '@mui/material';
-//import {ListItem} from '@mui/material';
-//import {ListItemText} from '@mui/material';
+import {dataToAddNoteInSearchBar} from '../myInterface/dataForAddNote'
+import { NavigateFunction } from 'react-router-dom';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -73,15 +67,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
  */
 
 
-export default function SearchAppBar() {
+const SearchAppBar: React.FC<dataToAddNoteInSearchBar> =  ({goToAddPage, route} ) => {
 
   
   //const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   
   //const classes = useStyles();
-
-  
-  
 
 
   return (
@@ -94,7 +85,7 @@ export default function SearchAppBar() {
             color="inherit"
             aria-label="open drawer"
             sx={{ mr: 2 }}
-            
+            onClick={() => goToAddPage(route)}
             
           >
             <AddIcon />
@@ -108,30 +99,6 @@ export default function SearchAppBar() {
           >
             TEXT NOTES APP
           </Typography>
-
-          {/*
-
-            <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
-            <List className={classes.drawer}>
-              <ListItem button={'true'}>
-                <ListItemText primary="Home" />
-              </ListItem>
-
-              <ListItem button={'true'}>
-                <ListItemText primary="About" />
-              </ListItem>
-
-              <ListItem button={'true'}>
-                <ListItemText primary="Contact" />
-              </ListItem>
-
-              <ListItem button={'true'}>
-                <ListItemText primary="Services" />
-              </ListItem>
-            </List>
-          </Drawer>
-          
-          */}
 
           <Search>
             <SearchIconWrapper>
@@ -151,3 +118,4 @@ export default function SearchAppBar() {
     </Box>
   );
 }
+export default SearchAppBar;

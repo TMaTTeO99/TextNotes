@@ -8,7 +8,7 @@ import { NoteItemProps } from "../myInterface/noteInterfaces";
  */
 
 
-const NoteItem: React.FC<NoteItemProps> = ({content, title, data, id, deleteNote}) => {
+const NoteItem: React.FC<NoteItemProps> = ({content, title, data, /* ffor debug id,*/ deleteNote}) => {
 
     return (
         <Card style={{maxWidth: '250px', height: '100'}}>
@@ -16,9 +16,13 @@ const NoteItem: React.FC<NoteItemProps> = ({content, title, data, id, deleteNote
                 <Typography variant="h6" className="notestyle">
                     {title}
                 </Typography>
-                <Typography variant="h6" >
-                    {id + "ID"}
-                </Typography>
+                {/* 
+                     for debug
+                    <Typography variant="h6" >
+                        {id + "ID"}
+                    </Typography>
+                */}
+                
                 <Typography  className="notestyle">
                     {data}
                 </Typography>

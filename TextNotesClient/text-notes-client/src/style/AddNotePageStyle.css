@@ -1,0 +1,37 @@
+.headerAddNote {
+    display: flex;
+    justify-content: center;
+    background-color: black;    
+    padding: 1rem;
+    margin-bottom: 1rem;
+    color: white;
+    width: 97%;
+    position: relative;
+    height: 40px;
+}
+
+.contentHeaderAddNote {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.contentHeaderAddNote h1 {
+    flex-grow: 1;
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.contentHeaderAddNote svg {
+    position: absolute;
+    left: 0;
+}
+
+.buttonsAddNote {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
