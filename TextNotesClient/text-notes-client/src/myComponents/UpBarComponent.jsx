@@ -6,15 +6,17 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
-import MenuIcon from '@mui/icons-material/Menu';
+//import MenuIcon from '@mui/icons-material/Menu';
+import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 
-import { makeStyles } from '@mui/styles';
-import { useState } from 'react';
-import { Drawer } from '@mui/material';
-import {List} from '@mui/material';
-import {ListItem} from '@mui/material';
-import {ListItemText} from '@mui/material';
+//import { makeStyles } from '@mui/styles';
+//import { useState } from 'react';
+//import { Drawer } from '@mui/material';
+//import {List} from '@mui/material';
+//import {ListItem} from '@mui/material';
+//import {ListItemText} from '@mui/material';
+
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -58,7 +60,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const useStyles = makeStyles((theme) => ({
+/*
+  const useStyles = makeStyles((theme) => ({
    drawer: { 
     width: 250,
    }, 
@@ -67,13 +70,15 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'violet'
     } 
 }));
+ */
+
 
 export default function SearchAppBar() {
 
   
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  //const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   
-  const classes = useStyles();
+  //const classes = useStyles();
 
   
   
@@ -89,10 +94,10 @@ export default function SearchAppBar() {
             color="inherit"
             aria-label="open drawer"
             sx={{ mr: 2 }}
-            onClick={() => setIsDrawerOpen(true)}
+            
             
           >
-            <MenuIcon />
+            <AddIcon />
             
           </IconButton>
           <Typography
@@ -104,7 +109,9 @@ export default function SearchAppBar() {
             TEXT NOTES APP
           </Typography>
 
-          <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
+          {/*
+
+            <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
             <List className={classes.drawer}>
               <ListItem button={'true'}>
                 <ListItemText primary="Home" />
@@ -123,6 +130,8 @@ export default function SearchAppBar() {
               </ListItem>
             </List>
           </Drawer>
+          
+          */}
 
           <Search>
             <SearchIconWrapper>
