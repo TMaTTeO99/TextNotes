@@ -23,7 +23,12 @@ const NoteItem: React.FC<NoteItemProps> = ({content, title, data, deleteNote, my
                 <Typography variant="body1" className="notestyle" style={{marginTop: '10px'}}>
                     {content}
                 </Typography>
-                <Button onClick={deleteNote} style={{marginTop: '10px'}}>
+                <Button onClick = 
+                    {(e) => {
+                        e.stopPropagation();
+                        deleteNote();
+                    }}
+                    style={{marginTop: '10px'}}>
                     DELETE
                 </Button>
             </CardContent>
