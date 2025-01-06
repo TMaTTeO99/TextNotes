@@ -75,10 +75,8 @@ function Home() {
 
     useEffect(() => {
 
-      console.log("pre: isRetrieveData != null && !isRetrieveData")
-      console.log(isRetrieveData + " " +  isRetrieveData)
       if(isRetrieveData != null && !isRetrieveData){
-      console.log("entro")
+      
         setIsRetrieveData(true);
         
         const doRetrieveData = async () => {
@@ -123,7 +121,7 @@ function Home() {
           <Grid2 container spacing={2}>
             {allNotes.map((note , idx) => (
               
-              <Grid2 size={{xs: 12, md: 6}} key={idx} >
+              <Grid2 size={{xs: 12, md: 3}} key={idx} >
                 <NoteItem 
                   data={note.date} 
                   content={note.content} 

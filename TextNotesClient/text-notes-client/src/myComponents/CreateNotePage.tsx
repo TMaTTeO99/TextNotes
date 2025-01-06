@@ -1,5 +1,4 @@
 import '../style/AddNotePageStyle.css';
-import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -9,7 +8,9 @@ import { addNewNoteInServer} from '../httpService';
 import { NoteDataFromServer } from '../myInterface/noteInterfaces';
 import { useState } from 'react';
 import { useNoteContext } from './MyContext';
-import { propsForForm } from '../myInterface/propsForFormAdd';
+import { useEffect } from 'react';
+
+
 /*
   Function to add note from UpBar in notes list 
 */
@@ -38,6 +39,13 @@ export default function MyNoteForm() {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+
+  useEffect(() => {
+    setTitle(selectedNoteTitle || '');
+    setContent(selectedNoteContent || '');
+    
+  }, [])
+  
 
   const doAddNote = async (title: string, content: string) => {
     
@@ -77,7 +85,7 @@ export default function MyNoteForm() {
         id="Title"
         label="Title"
         multiline
-        value={selectedNoteTitle}
+        value={title}
         maxRows={2}
         onChange={(e) => setTitle(e.target.value)}
       />
@@ -92,7 +100,7 @@ export default function MyNoteForm() {
           label="Content"
           multiline
           rows={15}
-          value={selectedNoteContent}
+          value={content}
           onChange={(e) => setContent(e.target.value)}
           fullWidth
         />
