@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.example.TextNotes.repo.MyRepo;
 import com.example.TextNotes.resources.MyNote;
@@ -38,7 +39,7 @@ public class NotesService {
     }
 
     public Page<MyNote> getAllSelectedNotes(int page, int size) {
-        return myRepo.findAll(PageRequest.of(page, size));
+        return myRepo.findAll(PageRequest.of(page, size, Sort.by("date")));
     }
     public List<MyNote> getAllNotes() {
         return myRepo.findAll();
