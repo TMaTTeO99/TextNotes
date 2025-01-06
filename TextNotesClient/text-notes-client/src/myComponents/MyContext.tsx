@@ -40,6 +40,13 @@ export const MyProvider: React.FC<{children: React.ReactNode}> = ({children}) =>
     //used to change header text in myform
     const [headerText, setheaderText] = useState(() => loadFromLocalStorage('headerText', ''))
     
+    //used to know if note must be modified or saved (is not must to be stored)
+    const [toSave, setToSave] = useState(true);
+
+    //note's id that user want change
+    const [idNoteToChange, setIdNoteToChange] = useState<string | undefined>('');
+
+
     //useeffect to save data in localstorage when they change
     useEffect(() => {saveToLocalStorage("allNotes", allNotes)}, [allNotes]);
     useEffect(() => {saveToLocalStorage("isRetrieveData", isRetrieveData)}, [isRetrieveData]);
@@ -63,7 +70,11 @@ export const MyProvider: React.FC<{children: React.ReactNode}> = ({children}) =>
                 selectedNoteContent, 
                 setSelectedNoteContent,
                 headerText, 
-                setheaderText
+                setheaderText,
+                toSave, 
+                setToSave,
+                idNoteToChange, 
+                setIdNoteToChange
             }}>
             {children}
         </NotesContext.Provider>

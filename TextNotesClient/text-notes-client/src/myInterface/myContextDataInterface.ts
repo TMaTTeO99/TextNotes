@@ -7,9 +7,11 @@ import { NoteDataFromServer } from "./noteInterfaces"
 export interface dataContext {
 
     isRetrieveData: boolean, //boolean to know if data has been recovered  
-    allNotes: NoteDataFromServer[] // data that has been recovered
     setIsRetrieveData: React.Dispatch<React.SetStateAction<boolean>>,
+    
+    allNotes: NoteDataFromServer[] // data that has been recovered
     setAllNotes: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>,
+    
     loading: boolean,
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
     
@@ -22,4 +24,10 @@ export interface dataContext {
     headerText: string,
     setheaderText: React.Dispatch<React.SetStateAction<string>>
 
+    toSave: boolean, //boolean to know if data has been recovered  
+    setToSave: React.Dispatch<React.SetStateAction<boolean>>,
+
+    //i need to know which note the user want change
+    idNoteToChange: string,
+    setIdNoteToChange: React.Dispatch<React.SetStateAction<string | undefined>>
 }

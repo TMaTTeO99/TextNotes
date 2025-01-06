@@ -65,7 +65,9 @@ function Home() {
       setLoading,
       setSelectedNoteTitle, 
       setSelectedNoteContent, 
-      setheaderText
+      setheaderText,
+      setIdNoteToChange,
+      setToSave,
     } = useNoteContext();
     
     const [dataState, setDataState] = useState(false);
@@ -92,15 +94,19 @@ function Home() {
       setheaderText("Crea una nuova nota")
       setSelectedNoteTitle("");
       setSelectedNoteContent("");
+      setToSave(true);
       navigate("/addNote");
     }
     
     //function to handle note selection
-    const handleSelectionNote = (title: string | null, content: string | null, note: string | null | undefined) => {
+    const handleSelectionNote = (title: string | null, content: string | null, note: string | null | undefined, id: string | undefined) => {
       
+
       setheaderText("Dettagli Nota");
       setSelectedNoteTitle(title);
-      setSelectedNoteContent(content)
+      setSelectedNoteContent(content); 
+      setIdNoteToChange(id);
+      setToSave(false);
       navigate("/viewNote");
 
 
@@ -127,7 +133,7 @@ function Home() {
                   content={note.content} 
                   title={note.title} 
                   deleteNote={async () => await deleteNote(note.id, allNotes, setAllNotes)}
-                  myOnClick={() => handleSelectionNote(note.title, note.content, note.date)}/>
+                  myOnClick={() => handleSelectionNote(note.title, note.content, note.date, note.id)}/>
               </Grid2>
   
             ))}
