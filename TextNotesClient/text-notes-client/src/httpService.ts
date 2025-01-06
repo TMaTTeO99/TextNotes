@@ -13,7 +13,7 @@ export async function getAllNotes(): Promise<[NoteDataFromServer]> {
 
 }
 
-export async function deleteNoteInServer(id: string): Promise<NoteDataFromServer> {
+export async function deleteNoteInServer(id: string | undefined): Promise<NoteDataFromServer> {
 
     const resp = await fetch('http://localhost:8080/notes/' + id, {
         method: 'DELETE'

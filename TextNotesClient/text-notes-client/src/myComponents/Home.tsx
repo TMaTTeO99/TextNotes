@@ -7,8 +7,7 @@ import { NoteDataFromServer } from '../myInterface/noteInterfaces';
 import { useEffect, useState} from 'react';
 import { getAllNotes, deleteNoteInServer} from '../httpService';
 import { useNavigate } from 'react-router-dom';
-
-
+import { useNoteContext } from './MyContext';
 /*
   Retrieve all notes from server
 */
@@ -34,7 +33,7 @@ async function retrieveData(setDataState: React.Dispatch<React.SetStateAction<bo
 /*
   delete a single note
 */
-async function deleteNote (id: string, data: NoteDataFromServer[], setData: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>) {
+async function deleteNote (id: string | undefined, data: NoteDataFromServer[], setData: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>) {
 
   try {
 
@@ -57,20 +56,33 @@ async function deleteNote (id: string, data: NoteDataFromServer[], setData: Reac
 
 function Home() {
 
+  /*
 
-    const [loading, setLoading] = useState(true);
+  isRetrieveData: boolean, //boolean to know if data has been recovered  
+    allNotes: NoteDataFromServer[] // data that has been recovered
+    setIsRetrieveData: React.Dispatch<React.SetStateAction<boolean>>,
+    setAllNotes: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>,
+  
+  */
+
+    const {isRetrieveData, allNotes, setIsRetrieveData, setAllNotes, loading, setLoading} = useNoteContext();
     const [dataState, setDataState] = useState(false);
-    const [data, setData] = useState<NoteDataFromServer[]>([]);
+
     const navigate = useNavigate();
    
 
     useEffect(() => {
-      console.log("fatta")
-      const doRetrieveData = async () => {
-        await retrieveData(setDataState, setData, setLoading);
+
+      if(isRetrieveData != null && !isRetrieveData){
+        
+        setIsRetrieveData(true);
+        
+        const doRetrieveData = async () => {
+          await retrieveData(setDataState, setAllNotes, setLoading);
+        }
+        doRetrieveData();
+        console.log("recuperati")
       }
-      doRetrieveData();
-    
     }, []);
     
 
@@ -87,14 +99,13 @@ function Home() {
         {/*Grid with All Notes*/}
         <div className='homeGrid'>
           <Grid container spacing={2}>
-            {data.map((note, idx) => (
+            {allNotes.map((note: NoteDataFromServer , idx: string) => (
               
               <Grid item size={{xs: 12, md: 6}} key={idx}>
-                <NoteItem data={note.date} content={note.content} title={note.title} /*id={note.id} for debug*/ deleteNote={async () => await deleteNote(note.id, data, setData)}/>
+                <NoteItem data={note.date} content={note.content} title={note.title} /*id={note.id} for debug*/ deleteNote={async () => await deleteNote(note.id, allNotes, setAllNotes)}/>
               </Grid>
   
             ))}
-              
           </Grid>
         </div>
       </div>

@@ -8,7 +8,7 @@ import { Button } from '@mui/material';
 import { addNewNoteInServer} from '../httpService';
 import { NoteDataFromServer } from '../myInterface/noteInterfaces';
 import { useState } from 'react';
-
+import { useNoteContext } from './MyContext';
 
 /*
   Function to add note from UpBar in notes list 
@@ -16,15 +16,18 @@ import { useState } from 'react';
 async function AddNotesInList (note: NoteDataFromServer) {
 
   try {
-    await addNewNoteInServer(note);
+    const noteAdded: NoteDataFromServer = await addNewNoteInServer(note);
+    return noteAdded;
   }
   catch(error) {
     console.log(error);
   }  
-
+  
 }
 
 export default function MyNoteForm() {
+
+  const {isRetrieveData, allNotes, setIsRetrieveData, setAllNotes} = useNoteContext();
 
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
@@ -36,11 +39,10 @@ export default function MyNoteForm() {
         title: title,
         content: content
     }
-    await AddNotesInList(objNote);
+    var newNote = await AddNotesInList(objNote);
+    setAllNotes([...allNotes, newNote])
     navigate("/");
   }
-
-
 
   return (
     <Box
