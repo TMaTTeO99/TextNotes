@@ -127,7 +127,7 @@ function Home() {
           <Grid2 container spacing={2}>
             {allNotes.map((note , idx) => (
               
-              <Grid2 size={{xs: 12, md: 3}} key={idx} >
+              <Grid2 size={{xs: 12, md: 4}} key={idx} >
                 <NoteItem 
                   data={note.date} 
                   content={note.content} 

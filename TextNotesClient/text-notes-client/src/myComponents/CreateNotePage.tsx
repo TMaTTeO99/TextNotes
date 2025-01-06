@@ -50,20 +50,23 @@ export default function MyNoteForm() {
     selectedNoteContent, 
     headerText,
     toSave, 
-    setToSave,
     idNoteToChange,
   } = useNoteContext();
 
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [isModified, setIsModified] = useState(false);
 
   useEffect(() => {
     setTitle(selectedNoteTitle || '');
     setContent(selectedNoteContent || '');
-    
   }, [])
-  
+
+  useEffect(() => {
+    setIsModified(title !== (selectedNoteTitle || '') || content !== (selectedNoteContent || ''))
+  }, [title, content])
+
 
   const doAddNote = async (title: string, content: string) => {
     
@@ -92,7 +95,7 @@ export default function MyNoteForm() {
 
       //update the previus note in my list
       setAllNotes(allNotes.map(note => note.id === newNote?.id ? newNote : note) as NoteDataFromServer[])
-      
+
     }
     else console.log("row 52: doAddNote (newNote undefined) ")
     navigate("/");
@@ -142,20 +145,22 @@ export default function MyNoteForm() {
           onChange={(e) => setContent(e.target.value)}
           fullWidth
         />
-        <Button 
-          sx={{ 
-            mt: 1,
-            alignSelf: 'flex-end'
-          }}
-          onClick={() => {
-            
-            //check if save button is called to modify note or create note
-            if(toSave) doAddNote(title, content)    
-            else doModifyNote(title, content, idNoteToChange)
-          }}
-        >
-          Save
-        </Button>
+        {isModified && 
+
+            <Button 
+                sx={{ 
+                mt: 1,
+                alignSelf: 'flex-end'
+                }}
+                onClick={() => {
+                    //check if save button is called to modify note or create note
+                    if(toSave) doAddNote(title, content)    
+                    else doModifyNote(title, content, idNoteToChange)
+                }}
+            >
+                Save
+            </Button>        
+        }
       </div>
     </Box>
   );
