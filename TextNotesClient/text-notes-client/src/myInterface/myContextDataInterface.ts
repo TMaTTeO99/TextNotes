@@ -12,4 +12,14 @@ export interface dataContext {
     setAllNotes: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>,
     loading: boolean,
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
+    
+    selectedNoteTitle: string | null,
+    setSelectedNoteTitle: React.Dispatch<React.SetStateAction<string | null>>
+
+    selectedNoteContent: string | null,
+    setSelectedNoteContent: React.Dispatch<React.SetStateAction<string | null>>,
+
+    headerText: string,
+    setheaderText: React.Dispatch<React.SetStateAction<string>>
+
 }

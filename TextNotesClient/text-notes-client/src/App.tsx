@@ -5,20 +5,17 @@ import { MyProvider } from './myComponents/MyContext';
 
 function App() {
   
-  
-  //temp handle of error
- 
-    return (
-      <MyProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/addNote" element={<MyNoteForm />} />
-          </Routes>
-        </Router>
-      </MyProvider>
-      
-    );
+  return (
+    <MyProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/addNote" element={<MyNoteForm />} />
+          <Route path="/viewNote" element={<MyNoteForm/>} />
+        </Routes>
+      </Router>
+    </MyProvider>  
+  );
  
   
 }

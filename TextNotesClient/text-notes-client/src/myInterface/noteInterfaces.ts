@@ -3,8 +3,7 @@ export interface NoteItemProps {
     content: string | null,
     title: string | null,
     data?: string | null,
-    //id: string, for debug
-    //updateNotes: (newContent: string, newTitle: string) => void,
+    myOnClick: () => void,
     deleteNote: () => void
 
 }

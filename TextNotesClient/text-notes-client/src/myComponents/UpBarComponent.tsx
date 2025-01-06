@@ -67,7 +67,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
  */
 
 
-const SearchAppBar: React.FC<dataToAddNoteInSearchBar> =  ({goToAddPage, route} ) => {
+const SearchAppBar: React.FC<dataToAddNoteInSearchBar> =  ({goToAddPage} ) => {
 
   
   //const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -85,7 +85,7 @@ const SearchAppBar: React.FC<dataToAddNoteInSearchBar> =  ({goToAddPage, route} 
             color="inherit"
             aria-label="open drawer"
             sx={{ mr: 2 }}
-            onClick={() => goToAddPage(route)}
+            onClick={() => goToAddPage()}
             
           >
             <AddIcon />

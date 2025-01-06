@@ -1,7 +1,7 @@
 import '../style/HomeStyle.css'
 
 import SearchAppBar from './UpBarComponent'; 
-import {  Grid } from '@mui/material'
+import {  Grid, Grid2 } from '@mui/material'
 import NoteItem from './NoteItem';
 import { NoteDataFromServer } from '../myInterface/noteInterfaces';
 import { useEffect, useState} from 'react';
@@ -37,7 +37,7 @@ async function deleteNote (id: string | undefined, data: NoteDataFromServer[], s
 
   try {
 
-    const noteDeleted = await deleteNoteInServer(id);
+    await deleteNoteInServer(id);
     const updatedNotes = data.filter(note => note.id !== id);
     updatedNotes.forEach(n => console.log(n))
     setData(updatedNotes);
@@ -56,25 +56,29 @@ async function deleteNote (id: string | undefined, data: NoteDataFromServer[], s
 
 function Home() {
 
-  /*
-
-  isRetrieveData: boolean, //boolean to know if data has been recovered  
-    allNotes: NoteDataFromServer[] // data that has been recovered
-    setIsRetrieveData: React.Dispatch<React.SetStateAction<boolean>>,
-    setAllNotes: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>,
-  
-  */
-
-    const {isRetrieveData, allNotes, setIsRetrieveData, setAllNotes, loading, setLoading} = useNoteContext();
+    const {
+      isRetrieveData,
+      allNotes, 
+      setIsRetrieveData, 
+      setAllNotes, 
+      loading, 
+      setLoading,
+      setSelectedNoteTitle, 
+      setSelectedNoteContent, 
+      setheaderText
+    } = useNoteContext();
+    
     const [dataState, setDataState] = useState(false);
 
     const navigate = useNavigate();
-   
+    
 
     useEffect(() => {
 
+      console.log("pre: isRetrieveData != null && !isRetrieveData")
+      console.log(isRetrieveData + " " +  isRetrieveData)
       if(isRetrieveData != null && !isRetrieveData){
-        
+      console.log("entro")
         setIsRetrieveData(true);
         
         const doRetrieveData = async () => {
@@ -84,7 +88,25 @@ function Home() {
         console.log("recuperati")
       }
     }, []);
+
+    //function to go to add note page
+    const goToAddNote = () => {
+      setheaderText("Crea una nuova nota")
+      setSelectedNoteTitle("");
+      setSelectedNoteContent("");
+      navigate("/addNote");
+    }
     
+    //function to handle note selection
+    const handleSelectionNote = (title: string | null, content: string | null, note: string | null | undefined) => {
+      
+      setheaderText("Dettagli Nota");
+      setSelectedNoteTitle(title);
+      setSelectedNoteContent(content)
+      navigate("/viewNote");
+
+
+    }
 
     //data.forEach(n => console.log(n.id));
     if(loading)return (<h1>Loading...</h1>);
@@ -94,19 +116,24 @@ function Home() {
       <div className='homeContainer'>
           
         {/*Header Section*/}
-        <SearchAppBar goToAddPage={navigate} route='/addNote'/>
+        <SearchAppBar goToAddPage={goToAddNote} />
   
         {/*Grid with All Notes*/}
         <div className='homeGrid'>
-          <Grid container spacing={2}>
-            {allNotes.map((note: NoteDataFromServer , idx: string) => (
+          <Grid2 container spacing={2}>
+            {allNotes.map((note , idx) => (
               
-              <Grid item size={{xs: 12, md: 6}} key={idx}>
-                <NoteItem data={note.date} content={note.content} title={note.title} /*id={note.id} for debug*/ deleteNote={async () => await deleteNote(note.id, allNotes, setAllNotes)}/>
-              </Grid>
+              <Grid2 size={{xs: 12, md: 6}} key={idx} >
+                <NoteItem 
+                  data={note.date} 
+                  content={note.content} 
+                  title={note.title} 
+                  deleteNote={async () => await deleteNote(note.id, allNotes, setAllNotes)}
+                  myOnClick={() => handleSelectionNote(note.title, note.content, note.date)}/>
+              </Grid2>
   
             ))}
-          </Grid>
+          </Grid2>
         </div>
       </div>
     );

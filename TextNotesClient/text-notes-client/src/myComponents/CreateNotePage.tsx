@@ -9,7 +9,7 @@ import { addNewNoteInServer} from '../httpService';
 import { NoteDataFromServer } from '../myInterface/noteInterfaces';
 import { useState } from 'react';
 import { useNoteContext } from './MyContext';
-
+import { propsForForm } from '../myInterface/propsForFormAdd';
 /*
   Function to add note from UpBar in notes list 
 */
@@ -27,7 +27,13 @@ async function AddNotesInList (note: NoteDataFromServer) {
 
 export default function MyNoteForm() {
 
-  const {isRetrieveData, allNotes, setIsRetrieveData, setAllNotes} = useNoteContext();
+  const {
+    allNotes, 
+    setAllNotes,
+    selectedNoteTitle, 
+    selectedNoteContent, 
+    headerText
+  } = useNoteContext();
 
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
@@ -40,7 +46,10 @@ export default function MyNoteForm() {
         content: content
     }
     var newNote = await AddNotesInList(objNote);
-    setAllNotes([...allNotes, newNote])
+    if(newNote){
+      setAllNotes([...allNotes, newNote])
+    }
+    else console.log("row 52: doAddNote (newNote undefined) ")
     navigate("/");
   }
 
@@ -61,13 +70,14 @@ export default function MyNoteForm() {
       <div className="headerAddNote">
         <div className="contentHeaderAddNote">
           <ArrowBackIcon onClick={() => navigate(-1)} style={{ cursor: 'pointer', marginLeft: '1rem' }} />
-          <h1 style={{ margin: 0 }}>Crea una nuova nota</h1>
+          <h1 style={{ margin: 0 }}>{headerText}</h1>
         </div>
       </div>
       <TextField
-        id="outlined-multiline-flexible"
+        id="Title"
         label="Title"
         multiline
+        value={selectedNoteTitle}
         maxRows={2}
         onChange={(e) => setTitle(e.target.value)}
       />
@@ -78,10 +88,11 @@ export default function MyNoteForm() {
         justifyContent: 'flex-start'
       }}>
         <TextField
-          id="outlined-multiline-static"
+          id="Content"
           label="Content"
           multiline
           rows={15}
+          value={selectedNoteContent}
           onChange={(e) => setContent(e.target.value)}
           fullWidth
         />
