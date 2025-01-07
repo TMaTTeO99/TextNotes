@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.example.TextNotes.resources.MyNote;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.util.Date;
@@ -25,8 +26,14 @@ public class MyController {
     private final NotesService notesService;
 
     @PostMapping("/addNote")
-    public ResponseEntity<MyNote> createNote(@RequestBody MyNote note) throws InvalidBodyException {
-        return ResponseEntity.created(URI.create("/notes/IDnotes")).body(notesService.createNote(note));
+    public ResponseEntity<MyNote> createNote(@RequestBody MyNote note) {
+
+        try {
+            return ResponseEntity.created(URI.create("/notes/IDnotes")).body(notesService.createNote(note));
+        }
+        catch (InvalidBodyException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
     }
 
     @GetMapping("/selectedNumber")
@@ -42,23 +49,67 @@ public class MyController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MyNote> getNoteById(@PathVariable String id) throws InvalidBodyException {
-        return ResponseEntity.ok().body(notesService.getNotes(id));
+    public ResponseEntity<MyNote> getNoteById(@PathVariable String id)  {
+
+        try {
+            return ResponseEntity.ok().body(notesService.getNotes(id));
+        }
+        catch (InvalidBodyException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
+
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<MyNote> deleteNote(@PathVariable String id) throws ResourceNotFoundException {
-        return ResponseEntity.ok().body(notesService.deleteNote(id));
+    public ResponseEntity<MyNote> deleteNote(@PathVariable String id)   {
+
+        try {
+            return ResponseEntity.ok().body(notesService.deleteNote(id));
+        }
+        catch (ResourceNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
+
     }
 
     @PutMapping("/updateNote")
-    public ResponseEntity<MyNote> updateNote(@RequestBody MyNote note) throws ResourceNotFoundException, InvalidBodyException {
-        return ResponseEntity.ok().body(notesService.updateNote(note));
+    public ResponseEntity<MyNote> updateNote(@RequestBody MyNote note)   {
+
+        try {
+            return ResponseEntity.ok().body(notesService.updateNote(note));
+        }
+        catch (ResourceNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+        catch (InvalidBodyException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
+
     }
 
-    @ExceptionHandler(InvalidBodyException.class)
-    public ResponseEntity<ErrorRespose> handleInvalidBodyException(InvalidBodyException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorRespose(e.getMessage(), 400, new Date(System.currentTimeMillis())));
+    /**
+     * Centralizated handler to send ResponseStatusException
+     * @param e: Exception throwed
+     */
+
+    /*
+    @ExceptionHandler(Exception.class)
+    public void handleException(Exception e) {
+
+        if (e instanceof InvalidBodyException) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
+        else if (e instanceof ResourceNotFoundException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+        else {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
+        }
     }
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ErrorRespose> handleResponseStatusException(ResponseStatusException e) {
+        return ResponseEntity.status(e.getStatusCode()).body(new ErrorRespose(e.getMessage(), e.getStatusCode(), e.getStackTrace()));
+    }
+    */
 
 }

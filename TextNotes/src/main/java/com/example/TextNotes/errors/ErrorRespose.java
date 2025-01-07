@@ -4,6 +4,7 @@ package com.example.TextNotes.errors;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpStatusCode;
 
 import java.util.Date;
 
@@ -13,6 +14,6 @@ import java.util.Date;
 public class ErrorRespose {
 
     private String error;
-    private int status;
-    private Date timestamp;
+    private HttpStatusCode status;
+    private StackTraceElement[] stackTrace;
 }
