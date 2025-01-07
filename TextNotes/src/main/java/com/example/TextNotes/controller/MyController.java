@@ -40,6 +40,12 @@ public class MyController {
     public ResponseEntity<List<MyNote>> getAllNotes() {
         return ResponseEntity.ok().body(notesService.getAllNotes());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<MyNote> getNoteById(@PathVariable String id) throws InvalidBodyException {
+        return ResponseEntity.ok().body(notesService.getNotes(id));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<MyNote> deleteNote(@PathVariable String id) throws ResourceNotFoundException {
         return ResponseEntity.ok().body(notesService.deleteNote(id));
@@ -49,7 +55,6 @@ public class MyController {
     public ResponseEntity<MyNote> updateNote(@RequestBody MyNote note) throws ResourceNotFoundException, InvalidBodyException {
         return ResponseEntity.ok().body(notesService.updateNote(note));
     }
-
 
     @ExceptionHandler(InvalidBodyException.class)
     public ResponseEntity<ErrorRespose> handleInvalidBodyException(InvalidBodyException e) {

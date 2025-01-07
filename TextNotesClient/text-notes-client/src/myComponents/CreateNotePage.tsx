@@ -4,12 +4,12 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Button } from '@mui/material';
-import { addNewNoteInServer, updateNote} from '../httpService';
+import { addNewNoteInServer, updateNote, getNote} from '../httpService';
 import { NoteDataFromServer } from '../myInterface/noteInterfaces';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNoteContext } from './MyContext';
 import { useEffect } from 'react';
-
+import { useParams } from 'react-router-dom';
 
 /*
   Function to add note from UpBar in notes list 
@@ -46,31 +46,46 @@ export default function MyNoteForm() {
   const {
     allNotes, 
     setAllNotes,
-    selectedNoteTitle, 
-    selectedNoteContent, 
-    headerText,
-    toSave, 
-    idNoteToChange,
     setAllNotesCopy
   } = useNoteContext();
 
+  const {id, headerText, toSave} = useParams();
   const navigate = useNavigate();
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [title, setTitle] = useState<string | null>('');
+  const [content, setContent] = useState<string | null>('');
   const [isModified, setIsModified] = useState(false);
+  const [noteRetrieve, setNoteRetrieve] = useState<NoteDataFromServer>();
+
+
+  console.log("value toSave: " + toSave + " toSave type :" + typeof toSave );
+
+  if(id && id !== ''){
+
+    useEffect(() => {
+      
+      const doGetNote = async (id: string, setTitle: React.Dispatch<React.SetStateAction<string | null>>, setContent: React.Dispatch<React.SetStateAction<string | null>> ) => {
+        const note = await getNote(id);
+        setTitle(note.title);
+        setContent(note.content);
+        setNoteRetrieve(note);
+      }
+
+      doGetNote(id, setTitle, setContent);
+      
+    }, [])
+  }
+
 
   useEffect(() => {
-    setTitle(selectedNoteTitle || '');
-    setContent(selectedNoteContent || '');
-  }, [])
-
-  useEffect(() => {
-    setIsModified(title !== (selectedNoteTitle || '') || content !== (selectedNoteContent || ''))
+    
+    setIsModified(title !== (noteRetrieve?.title || '') || content !== (noteRetrieve?.content || ''));
+    console.log(title !== (noteRetrieve?.title || '') || content !== (noteRetrieve?.content || ''));
   }, [title, content])
 
 
-  const doAddNote = async (title: string, content: string) => {
+  const doAddNote = async (title: string | null, content: string | null) => {
     
+    console.log("IN AGGIUNTA");
     const objNote: NoteDataFromServer = {
         title: title,
         content: content
@@ -84,7 +99,9 @@ export default function MyNoteForm() {
     navigate("/");
   }
 
-  const doModifyNote = async (title: string, content: string, id: string | undefined) => {
+  const doModifyNote = async (title: string | null, content: string | null, id: string | undefined) => {
+
+    console.log("IN MODIFICA");
 
     const objNote: NoteDataFromServer = {
         title: title,
@@ -157,8 +174,8 @@ export default function MyNoteForm() {
                 }}
                 onClick={() => {
                     //check if save button is called to modify note or create note
-                    if(toSave) doAddNote(title, content)    
-                    else doModifyNote(title, content, idNoteToChange)
+                    if(toSave === "true") doAddNote(title, content)    
+                    else doModifyNote(title, content, id)
                 }}
             >
                 Save

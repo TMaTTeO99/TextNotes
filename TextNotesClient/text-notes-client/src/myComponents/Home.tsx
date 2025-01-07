@@ -63,61 +63,36 @@ async function deleteNote (id: string | undefined, data: NoteDataFromServer[],
 function Home() {
 
     const {
-      isRetrieveData,
       allNotes, 
-      setIsRetrieveData, 
       setAllNotes, 
-      loading, 
-      setLoading,
-      setSelectedNoteTitle, 
-      setSelectedNoteContent, 
-      setheaderText,
-      setIdNoteToChange,
-      setToSave,
       setAllNotesCopy
     } = useNoteContext();
     
     const [dataState, setDataState] = useState(false);
-
+    const [loading, setLoading] = useState(true);
+      
     const navigate = useNavigate();
     
     useEffect(() => {
 
-      if(isRetrieveData != null && !isRetrieveData){
-      
-        setIsRetrieveData(true);
-        
-        const doRetrieveData = async () => {
-          await retrieveData(setDataState, setAllNotes, setLoading, setAllNotesCopy);
-        }
-        doRetrieveData();
-        
-        console.log("data retreived")
+      const doRetrieveData = async () => {
+        await retrieveData(setDataState, setAllNotes, setLoading, setAllNotesCopy);
       }
+      
+      doRetrieveData();
+      console.log("data retreived");
+
     }, []);
     
 
     //function to go to add note page
     const goToAddNote = () => {
-      setheaderText("Crea una nuova nota")
-      setSelectedNoteTitle("");
-      setSelectedNoteContent("");
-      setToSave(true);
-      navigate("/addNote");
+      navigate("/addNote/Crea una nuova nota/" + true + "/");
     }
     
     //function to handle note selection
     const handleSelectionNote = (title: string | null, content: string | null, note: string | null | undefined, id: string | undefined) => {
-      
-
-      setheaderText("Dettagli Nota");
-      setSelectedNoteTitle(title);
-      setSelectedNoteContent(content); 
-      setIdNoteToChange(id);
-      setToSave(false);
-      navigate("/viewNote");
-
-
+      navigate("/viewNote/" + id + "/Dettagli Nota/" + false + "/");
     }
 
     

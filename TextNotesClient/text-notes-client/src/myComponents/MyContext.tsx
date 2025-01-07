@@ -26,56 +26,17 @@ export const MyProvider: React.FC<{children: React.ReactNode}> = ({children}) =>
 
     //used to save all data from server
     const [allNotes, setAllNotes] = useState<NoteDataFromServer[]>(() => loadFromLocalStorage('allNotes', []))
-    
-    //used to see if data are loaded from server
-    const [isRetrieveData, setIsRetrieveData] = useState<boolean>(() => loadFromLocalStorage('isRetrieveData', false))
-    
-    //used whereas data are loaded to see loading message
-    const [loading, setLoading] = useState<boolean>(() => loadFromLocalStorage('loading', false))
-
-    //used to pass data in myform when myform is called for view note details
-    const [selectedNoteTitle, setSelectedNoteTitle] = useState<string | null>(() => loadFromLocalStorage('selectedNoteTitle', ''))
-    const [selectedNoteContent, setSelectedNoteContent] = useState<string | null>(() => loadFromLocalStorage('selectedNoteContent', ''))
-    
-    //used to change header text in myform
-    const [headerText, setheaderText] = useState(() => loadFromLocalStorage('headerText', ''))
-    
-    //used to know if note must be modified or saved (is not must to be stored)
-    const [toSave, setToSave] = useState(true);
-
-    //note's id that user want change
-    const [idNoteToChange, setIdNoteToChange] = useState<string | undefined>('');
-
-    const [allNotesCopy, setAllNotesCopy] = useState<NoteDataFromServer[]>([])
+    const [allNotesCopy, setAllNotesCopy] = useState<NoteDataFromServer[]>(() => loadFromLocalStorage('noteCopy', []))
 
     //useeffect to save data in localstorage when they change
     useEffect(() => {saveToLocalStorage("allNotes", allNotes)}, [allNotes]);
-    useEffect(() => {saveToLocalStorage("isRetrieveData", isRetrieveData)}, [isRetrieveData]);
-    useEffect(() => {saveToLocalStorage("loading", loading)}, [loading]);
-    useEffect(() => {saveToLocalStorage("selectedNoteTitle", selectedNoteTitle)}, [selectedNoteTitle]);
-    useEffect(() => {saveToLocalStorage("selectedNoteContent", selectedNoteContent)}, [selectedNoteContent]);
-    useEffect(() => {saveToLocalStorage("headerText", headerText)}, [headerText]);
-    
+    useEffect(() => {saveToLocalStorage("noteCopy", allNotesCopy)}, [allNotesCopy]);
     
     
     return (
         <NotesContext.Provider value={{
-                isRetrieveData, 
                 allNotes, 
-                setIsRetrieveData, 
                 setAllNotes, 
-                loading, 
-                setLoading,
-                selectedNoteTitle, 
-                setSelectedNoteTitle, 
-                selectedNoteContent, 
-                setSelectedNoteContent,
-                headerText, 
-                setheaderText,
-                toSave, 
-                setToSave,
-                idNoteToChange, 
-                setIdNoteToChange,
                 allNotesCopy,
                 setAllNotesCopy
             }}>

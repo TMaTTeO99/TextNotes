@@ -11,21 +11,19 @@ function App() {
     sessionStorage.setItem("appStarted", "true")
     localStorage.clear();
   }
-  
   return (
 
     <MyProvider>
       <Router>
         <Routes>
+        
           <Route path="/" element={<Home />} />
-          <Route path="/addNote" element={<MyNoteForm />} />
-          <Route path="/viewNote" element={<MyNoteForm/>} />
+          <Route path="/addNote/:headerText/:toSave/" element={<MyNoteForm />} />
+          <Route path="/viewNote/:id/:headerText/:toSave/" element={<MyNoteForm/>} />
         </Routes>
       </Router>
     </MyProvider>  
   );
- 
-  
 }
 
 export default App

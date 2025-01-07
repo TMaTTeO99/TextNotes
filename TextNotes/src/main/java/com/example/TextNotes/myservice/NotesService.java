@@ -38,6 +38,13 @@ public class NotesService {
         return myRepo.save(note);
     }
 
+    public MyNote getNotes(String id) throws InvalidBodyException{
+
+        if(!existsNote(id))throw new InvalidBodyException("Note not exist");
+
+        return myRepo.findById(id).get();
+    }
+
     public Page<MyNote> getAllSelectedNotes(int page, int size) {
         return myRepo.findAll(PageRequest.of(page, size, Sort.by("date")));
     }

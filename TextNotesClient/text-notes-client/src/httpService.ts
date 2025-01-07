@@ -60,3 +60,15 @@ export async function updateNote(note: NoteDataFromServer) {
     return data;
     
 }
+export async function getNote(id: string) {
+    
+    const resp = await fetch('http://localhost:8080/notes/' + id , {
+        method: 'GET'
+    });
+    if (!resp.ok){
+        throw new Error("ERROR: status: " + resp.status);
+    }
+    const data: NoteDataFromServer = await resp.json();
+    return data;
+
+}
