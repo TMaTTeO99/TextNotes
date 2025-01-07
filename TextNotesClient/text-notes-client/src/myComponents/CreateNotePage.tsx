@@ -51,6 +51,7 @@ export default function MyNoteForm() {
     headerText,
     toSave, 
     idNoteToChange,
+    setAllNotesCopy
   } = useNoteContext();
 
   const navigate = useNavigate();
@@ -76,7 +77,8 @@ export default function MyNoteForm() {
     }
     var newNote = await AddNotesInList(objNote);
     if(newNote){
-      setAllNotes([...allNotes, newNote])
+      setAllNotes([...allNotes, newNote]);
+      setAllNotesCopy([...allNotes, newNote]);
     }
     else console.log("row 52: doAddNote (newNote undefined) ")
     navigate("/");
@@ -94,8 +96,9 @@ export default function MyNoteForm() {
     if(newNote){
 
       //update the previus note in my list
-      setAllNotes(allNotes.map(note => note.id === newNote?.id ? newNote : note) as NoteDataFromServer[])
-
+      const newList = allNotes.map(note => note.id === newNote?.id ? newNote : note) as NoteDataFromServer[];
+      setAllNotes(newList);
+      setAllNotesCopy(newList);
     }
     else console.log("row 52: doAddNote (newNote undefined) ")
     navigate("/");

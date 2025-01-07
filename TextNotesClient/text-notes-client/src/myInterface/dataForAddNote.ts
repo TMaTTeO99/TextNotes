@@ -1,8 +1,7 @@
-import { NavigateFunction } from "react-router-dom";
-
+import { NoteDataFromServer } from '../myInterface/noteInterfaces';
 export interface dataToAddNoteInSearchBar {
 
-    goToAddPage: () => void, 
+    goToAddPage: () => void
     
 
 }

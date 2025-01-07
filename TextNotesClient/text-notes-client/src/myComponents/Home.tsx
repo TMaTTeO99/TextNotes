@@ -1,24 +1,28 @@
 import '../style/HomeStyle.css'
 
 import SearchAppBar from './UpBarComponent'; 
-import {  Grid, Grid2 } from '@mui/material'
+import { Grid2 } from '@mui/material'
 import NoteItem from './NoteItem';
 import { NoteDataFromServer } from '../myInterface/noteInterfaces';
 import { useEffect, useState} from 'react';
 import { getAllNotes, deleteNoteInServer} from '../httpService';
 import { useNavigate } from 'react-router-dom';
 import { useNoteContext } from './MyContext';
+
 /*
   Retrieve all notes from server
 */
 async function retrieveData(setDataState: React.Dispatch<React.SetStateAction<boolean>>, 
                             setData: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>,
-                            setLoading: React.Dispatch<React.SetStateAction<boolean>>) {
+                            setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+                            setAllNotesCopy: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>
+                          ) {
 
   try {
     var listOfNotes: NoteDataFromServer[] = await getAllNotes();
     setDataState(false);
-    setData(listOfNotes);   
+    setData(listOfNotes); 
+    setAllNotesCopy([...listOfNotes]);  
   }
   catch(error){
 
@@ -33,14 +37,16 @@ async function retrieveData(setDataState: React.Dispatch<React.SetStateAction<bo
 /*
   delete a single note
 */
-async function deleteNote (id: string | undefined, data: NoteDataFromServer[], setData: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>) {
+async function deleteNote (id: string | undefined, data: NoteDataFromServer[], 
+                          setData: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>,
+                          setAllNotesCopy: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>) {
 
   try {
 
     await deleteNoteInServer(id);
     const updatedNotes = data.filter(note => note.id !== id);
-    updatedNotes.forEach(n => console.log(n))
     setData(updatedNotes);
+    setAllNotesCopy(updatedNotes)
 
   }
   catch(error) {
@@ -68,13 +74,13 @@ function Home() {
       setheaderText,
       setIdNoteToChange,
       setToSave,
+      setAllNotesCopy
     } = useNoteContext();
     
     const [dataState, setDataState] = useState(false);
 
     const navigate = useNavigate();
     
-
     useEffect(() => {
 
       if(isRetrieveData != null && !isRetrieveData){
@@ -82,12 +88,14 @@ function Home() {
         setIsRetrieveData(true);
         
         const doRetrieveData = async () => {
-          await retrieveData(setDataState, setAllNotes, setLoading);
+          await retrieveData(setDataState, setAllNotes, setLoading, setAllNotesCopy);
         }
         doRetrieveData();
-        console.log("recuperati")
+        
+        console.log("data retreived")
       }
     }, []);
+    
 
     //function to go to add note page
     const goToAddNote = () => {
@@ -112,7 +120,8 @@ function Home() {
 
     }
 
-    //data.forEach(n => console.log(n.id));
+    
+    
     if(loading)return (<h1>Loading...</h1>);
     if(dataState)return (<h1>Impossibile recuperare i dati</h1>);
 
@@ -120,7 +129,7 @@ function Home() {
       <div className='homeContainer'>
           
         {/*Header Section*/}
-        <SearchAppBar goToAddPage={goToAddNote} />
+        <SearchAppBar goToAddPage={goToAddNote}  />
   
         {/*Grid with All Notes*/}
         <div className='homeGrid'>
@@ -132,7 +141,7 @@ function Home() {
                   data={note.date} 
                   content={note.content} 
                   title={note.title} 
-                  deleteNote={async () => await deleteNote(note.id, allNotes, setAllNotes)}
+                  deleteNote={async () => await deleteNote(note.id, allNotes, setAllNotes, setAllNotesCopy)}
                   myOnClick={() => handleSelectionNote(note.title, note.content, note.date, note.id)}/>
               </Grid2>
   

@@ -9,8 +9,9 @@ import InputBase from '@mui/material/InputBase';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import {dataToAddNoteInSearchBar} from '../myInterface/dataForAddNote'
-import { NavigateFunction } from 'react-router-dom';
+import { useNoteContext } from './MyContext';
 
+import { useEffect, useState } from 'react';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -54,26 +55,46 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-/*
-  const useStyles = makeStyles((theme) => ({
-   drawer: { 
-    width: 250,
-   }, 
-    btn: {
-      fontSize: 60,
-      backgroundColor: 'violet'
-    } 
-}));
- */
 
 
 const SearchAppBar: React.FC<dataToAddNoteInSearchBar> =  ({goToAddPage} ) => {
 
   
-  //const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const { allNotes, setAllNotes, allNotesCopy} = useNoteContext();
+  allNotesCopy.forEach(c => console.log("after retrieve: " + c))
   
-  //const classes = useStyles();
+  
+  
+  
+  /*
+  const handleSearchInList = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if(event.key === "Enter"){
+      event.preventDefault();
+      const word: string = event.currentTarget.value;
 
+    }
+
+  }
+  */
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    
+    const searchValue = event.target.value.toLowerCase();
+    console.log("ok : " + searchValue);
+    console.log("alldata in copy");
+    allNotesCopy.forEach(c => console.log(c));
+    if(!searchValue || searchValue === ''){
+      console.log("searched Empty. List: ");
+      allNotesCopy.forEach(c => console.log(c));
+      setAllNotes(allNotesCopy);
+    }
+    else {
+      console.log("searched NOT Empty. List: ");
+      allNotesCopy.forEach(c => console.log(c));
+
+      const filteredList = allNotes.filter(n  => n.title?.toLowerCase().includes(searchValue));
+      setAllNotes(filteredList);
+    }
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -107,6 +128,8 @@ const SearchAppBar: React.FC<dataToAddNoteInSearchBar> =  ({goToAddPage} ) => {
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
+              
+              onChange={handleChange}
             />
           </Search>
           
@@ -117,5 +140,6 @@ const SearchAppBar: React.FC<dataToAddNoteInSearchBar> =  ({goToAddPage} ) => {
       
     </Box>
   );
+  /*onKeyDown={handleSearchInList}*/
 }
 export default SearchAppBar;

@@ -28,6 +28,10 @@ export interface dataContext {
     setToSave: React.Dispatch<React.SetStateAction<boolean>>,
 
     //i need to know which note the user want change
-    idNoteToChange: string,
+    idNoteToChange: string | undefined,
     setIdNoteToChange: React.Dispatch<React.SetStateAction<string | undefined>>
+
+    //i need a copy of my note to build search feature
+    allNotesCopy: NoteDataFromServer[] // data that has been recovered
+    setAllNotesCopy: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>,
 }

@@ -46,6 +46,7 @@ export const MyProvider: React.FC<{children: React.ReactNode}> = ({children}) =>
     //note's id that user want change
     const [idNoteToChange, setIdNoteToChange] = useState<string | undefined>('');
 
+    const [allNotesCopy, setAllNotesCopy] = useState<NoteDataFromServer[]>([])
 
     //useeffect to save data in localstorage when they change
     useEffect(() => {saveToLocalStorage("allNotes", allNotes)}, [allNotes]);
@@ -74,7 +75,9 @@ export const MyProvider: React.FC<{children: React.ReactNode}> = ({children}) =>
                 toSave, 
                 setToSave,
                 idNoteToChange, 
-                setIdNoteToChange
+                setIdNoteToChange,
+                allNotesCopy,
+                setAllNotesCopy
             }}>
             {children}
         </NotesContext.Provider>
