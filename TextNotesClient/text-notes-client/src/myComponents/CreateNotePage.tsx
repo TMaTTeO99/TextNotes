@@ -85,7 +85,7 @@ export default function MyNoteForm() {
 
   const doAddNote = async (title: string | null, content: string | null) => {
     
-    console.log("IN AGGIUNTA");
+
     const objNote: NoteDataFromServer = {
         title: title,
         content: content
@@ -101,7 +101,6 @@ export default function MyNoteForm() {
 
   const doModifyNote = async (title: string | null, content: string | null, id: string | undefined) => {
 
-    console.log("IN MODIFICA");
 
     const objNote: NoteDataFromServer = {
         title: title,

@@ -79,21 +79,16 @@ const SearchAppBar: React.FC<dataToAddNoteInSearchBar> =  ({goToAddPage} ) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     
     const searchValue = event.target.value.toLowerCase();
-    console.log("ok : " + searchValue);
-    console.log("alldata in copy");
-    allNotesCopy.forEach(c => console.log(c));
-    if(!searchValue || searchValue === ''){
-      console.log("searched Empty. List: ");
-      allNotesCopy.forEach(c => console.log(c));
-      setAllNotes(allNotesCopy);
-    }
-    else {
-      console.log("searched NOT Empty. List: ");
-      allNotesCopy.forEach(c => console.log(c));
 
-      const filteredList = allNotes.filter(n  => n.title?.toLowerCase().includes(searchValue));
-      setAllNotes(filteredList);
-    }
+    //make a copy of my allNoteCopy
+    const filteredList = JSON.parse(JSON.stringify(allNotesCopy.filter(n  => n.title?.toLowerCase().includes(searchValue))));
+    
+
+    if (filteredList.length === 0) setAllNotes(filteredList);
+    else if (!searchValue || searchValue === '') setAllNotes(allNotesCopy);
+    else setAllNotes(filteredList);
+    
+    
   }
 
   return (
