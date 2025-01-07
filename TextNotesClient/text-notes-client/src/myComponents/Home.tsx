@@ -111,7 +111,7 @@ function Home() {
           <Grid2 container spacing={2}>
             {allNotes.map((note , idx) => (
               
-              <Grid2 size={{xs: 12, md: 4}} key={idx} >
+              <Grid2 size={{xs: 12, md: allNotes.length === 1 ? 12 : 4}} key={idx} >
                 <NoteItem 
                   data={note.date} 
                   content={note.content} 
@@ -124,7 +124,6 @@ function Home() {
           </Grid2>
         </div>
       </div>
-    );
-    
+    );    
 }
 export default Home
