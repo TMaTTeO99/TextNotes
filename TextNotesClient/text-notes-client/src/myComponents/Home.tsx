@@ -3,23 +3,26 @@ import '../style/HomeStyle.css'
 import SearchAppBar from './UpBarComponent'; 
 import { Grid2 } from '@mui/material'
 import NoteItem from './NoteItem';
-import { NoteDataFromServer } from '../myInterface/noteInterfaces';
 import { useEffect, useState} from 'react';
-import { getAllNotes, deleteNoteInServer} from '../httpService';
+import { deleteNoteInServer} from '../httpService';
+import appClient from '../httpServiceByManifest';
 import { useNavigate } from 'react-router-dom';
 import { useNoteContext } from './MyContext';
+import {AllGet200ResponseInner} from '../../out/models/AllGet200ResponseInner' 
 
 /*
   Retrieve all notes from server
 */
 async function retrieveData(setDataState: React.Dispatch<React.SetStateAction<boolean>>, 
-                            setData: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>,
+                            setData: React.Dispatch<React.SetStateAction<AllGet200ResponseInner[]>>
+                            /*setData: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>*/,
                             setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-                            setAllNotesCopy: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>
+                            setAllNotesCopy: React.Dispatch<React.SetStateAction<AllGet200ResponseInner[]>>
+                            /*setAllNotesCopy: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>*/
                           ) {
 
   try {
-    var listOfNotes: NoteDataFromServer[] = await getAllNotes();
+    var listOfNotes: AllGet200ResponseInner[] /*NoteDataFromServer[]*/ = await appClient.allGet() //getAllNotes();
     setDataState(false);
     setData(listOfNotes); 
     setAllNotesCopy([...listOfNotes]);  
@@ -37,9 +40,9 @@ async function retrieveData(setDataState: React.Dispatch<React.SetStateAction<bo
 /*
   delete a single note
 */
-async function deleteNote (id: string | undefined, data: NoteDataFromServer[], 
-                          setData: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>,
-                          setAllNotesCopy: React.Dispatch<React.SetStateAction<NoteDataFromServer[]>>) {
+async function deleteNote (id: string | undefined, data: AllGet200ResponseInner[],
+                          setData: React.Dispatch<React.SetStateAction<AllGet200ResponseInner[]>>,
+                          setAllNotesCopy: React.Dispatch<React.SetStateAction<AllGet200ResponseInner[]>>) {
 
   try {
 
@@ -56,9 +59,6 @@ async function deleteNote (id: string | undefined, data: NoteDataFromServer[],
   }
 
 }
-
-
-
 
 function Home() {
 
@@ -91,7 +91,7 @@ function Home() {
     }
     
     //function to handle note selection
-    const handleSelectionNote = (title: string | null, content: string | null, note: string | null | undefined, id: string | undefined) => {
+    const handleSelectionNote = (id: string | undefined) => {
       navigate("/viewNote/" + id + "/Dettagli Nota/" + false + "/");
     }
 
@@ -112,12 +112,13 @@ function Home() {
             {allNotes.map((note , idx) => (
               
               <Grid2 size={{xs: 12, md: allNotes.length === 1 ? 12 : 4}} key={idx} >
+                
                 <NoteItem 
                   data={note.date} 
                   content={note.content} 
                   title={note.title} 
                   deleteNote={async () => await deleteNote(note.id, allNotes, setAllNotes, setAllNotesCopy)}
-                  myOnClick={() => handleSelectionNote(note.title, note.content, note.date, note.id)}/>
+                  myOnClick={() => handleSelectionNote(note.id)}/>
               </Grid2>
   
             ))}

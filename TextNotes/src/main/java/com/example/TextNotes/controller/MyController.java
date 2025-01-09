@@ -37,6 +37,9 @@ public class MyController {
         }
     }
 
+    /**
+     *  Not used from Client app
+     */
     @GetMapping("/selectedNumber")
     public ResponseEntity<Page<MyNote>> getAllSelectedNotes(@RequestParam(value = "page", defaultValue = "0") int page,
                                                             @RequestParam(value = "size", defaultValue = "10") int size) {

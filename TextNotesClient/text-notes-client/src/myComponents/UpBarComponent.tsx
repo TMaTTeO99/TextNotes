@@ -11,7 +11,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import {dataToAddNoteInSearchBar} from '../myInterface/dataForAddNote'
 import { useNoteContext } from './MyContext';
 
-import { useEffect, useState } from 'react';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -60,22 +59,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const SearchAppBar: React.FC<dataToAddNoteInSearchBar> =  ({goToAddPage} ) => {
 
   
-  const { allNotes, setAllNotes, allNotesCopy} = useNoteContext();
+  const { setAllNotes, allNotesCopy} = useNoteContext();
   allNotesCopy.forEach(c => console.log("after retrieve: " + c))
   
   
-  
-  
-  /*
-  const handleSearchInList = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if(event.key === "Enter"){
-      event.preventDefault();
-      const word: string = event.currentTarget.value;
-
-    }
-
-  }
-  */
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     
     const searchValue = event.target.value.toLowerCase();
@@ -135,6 +122,5 @@ const SearchAppBar: React.FC<dataToAddNoteInSearchBar> =  ({goToAddPage} ) => {
       
     </Box>
   );
-  /*onKeyDown={handleSearchInList}*/
 }
 export default SearchAppBar;

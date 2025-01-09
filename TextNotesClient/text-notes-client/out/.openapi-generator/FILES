@@ -1,0 +1,10 @@
+.openapi-generator-ignore
+apis/DefaultApi.ts
+apis/index.ts
+index.ts
+models/AddNotePost400Response.ts
+models/AddNotePostRequest.ts
+models/AllGet200ResponseInner.ts
+models/UpdateNotePutRequest.ts
+models/index.ts
+runtime.ts

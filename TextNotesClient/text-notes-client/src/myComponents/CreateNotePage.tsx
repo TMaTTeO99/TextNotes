@@ -4,20 +4,21 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Button } from '@mui/material';
-import { addNewNoteInServer, updateNote, getNote} from '../httpService';
-import { NoteDataFromServer } from '../myInterface/noteInterfaces';
 import React, { useState } from 'react';
 import { useNoteContext } from './MyContext';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import appClient from '../httpServiceByManifest';
+import {AllGet200ResponseInner} from '../../out/models/AllGet200ResponseInner'
+import {AddNotePostOperationRequest, UpdateNotePutOperationRequest, IdGetRequest} from '../../out/apis'
 
 /*
   Function to add note from UpBar in notes list 
 */
-async function AddNotesInList (note: NoteDataFromServer) {
+async function AddNotesInList (note: AddNotePostOperationRequest) {
 
   try {
-    const noteAdded: NoteDataFromServer = await addNewNoteInServer(note);
+    const noteAdded: AllGet200ResponseInner = await appClient.addNotePost(note);// addNewNoteInServer(note);
     return noteAdded;
   }
   catch(error) {
@@ -29,10 +30,10 @@ async function AddNotesInList (note: NoteDataFromServer) {
 /*
   Function to update note 
 */
-async function UpDateNote (note: NoteDataFromServer) {
+async function UpDateNote (note: UpdateNotePutOperationRequest) {
 
     try {
-      const noteAdded: NoteDataFromServer = await updateNote(note);
+      const noteAdded: AllGet200ResponseInner = await appClient.updateNotePut(note);//updateNote(note);
       return noteAdded;
     }
     catch(error) {
@@ -51,10 +52,10 @@ export default function MyNoteForm() {
 
   const {id, headerText, toSave} = useParams();
   const navigate = useNavigate();
-  const [title, setTitle] = useState<string | null>('');
-  const [content, setContent] = useState<string | null>('');
+  const [title, setTitle] = useState<string | undefined>('');
+  const [content, setContent] = useState<string | undefined>('');
   const [isModified, setIsModified] = useState(false);
-  const [noteRetrieve, setNoteRetrieve] = useState<NoteDataFromServer>();
+  const [noteRetrieve, setNoteRetrieve] = useState<AllGet200ResponseInner>();
 
 
   console.log("value toSave: " + toSave + " toSave type :" + typeof toSave );
@@ -63,8 +64,12 @@ export default function MyNoteForm() {
 
     useEffect(() => {
       
-      const doGetNote = async (id: string, setTitle: React.Dispatch<React.SetStateAction<string | null>>, setContent: React.Dispatch<React.SetStateAction<string | null>> ) => {
-        const note = await getNote(id);
+      const doGetNote = async (id: string, setTitle: React.Dispatch<React.SetStateAction<string | undefined>>, setContent: React.Dispatch<React.SetStateAction<string | undefined>> ) => {
+        
+        console.log("id: " + id);
+        const param: IdGetRequest = {id: id}
+        const note = await appClient.idGet(param)// getNote(id);
+
         setTitle(note.title);
         setContent(note.content);
         setNoteRetrieve(note);
@@ -83,12 +88,14 @@ export default function MyNoteForm() {
   }, [title, content])
 
 
-  const doAddNote = async (title: string | null, content: string | null) => {
+  const doAddNote = async (title: string | undefined/*null*/, content: string | undefined/*null*/) => {
     
 
-    const objNote: NoteDataFromServer = {
-        title: title,
-        content: content
+    const objNote: AddNotePostOperationRequest = {
+        addNotePostRequest: {
+          title: title,
+          content: content
+        }        
     }
     var newNote = await AddNotesInList(objNote);
     if(newNote){
@@ -99,20 +106,26 @@ export default function MyNoteForm() {
     navigate("/");
   }
 
-  const doModifyNote = async (title: string | null, content: string | null, id: string | undefined) => {
+  const doModifyNote = async (title: string | undefined, content: string | undefined, id: string) => {
 
 
-    const objNote: NoteDataFromServer = {
+    const objNote: UpdateNotePutOperationRequest = {
+
+      updateNotePutRequest: {
         title: title,
         content: content,
         id: id
+      }
+        
     }
+    
     var newNote = await UpDateNote(objNote);
     
     if(newNote){
 
       //update the previus note in my list
-      const newList = allNotes.map(note => note.id === newNote?.id ? newNote : note) as NoteDataFromServer[];
+      
+      const newList = allNotes.map(note => note.id === newNote?.id ? newNote : note) as AllGet200ResponseInner[];
       setAllNotes(newList);
       setAllNotesCopy(newList);
     }
@@ -174,7 +187,7 @@ export default function MyNoteForm() {
                 onClick={() => {
                     //check if save button is called to modify note or create note
                     if(toSave === "true") doAddNote(title, content)    
-                    else doModifyNote(title, content, id)
+                    else doModifyNote(title, content, id!)
                 }}
             >
                 Save

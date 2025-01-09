@@ -1,0 +1,231 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: OpenApi manifest for my TextNoteClient
+servers:
+  - url: http://localhost:8080/notes
+
+paths:
+  /all:
+    get:
+      description: Return all notes 
+      responses:
+        '200':
+          description: Successfully returned a list of notes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - id
+                  properties:
+                    id:
+                      type: string
+                    title:
+                      type: string
+                    date:
+                      type: string
+                    content:
+                      type: string
+  /addNote:
+    post: 
+      description: Add one note in list of notes 
+      requestBody:
+        required: true
+        content:
+          application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  date:
+                    type: string
+                  content:
+                    type: string
+      responses:
+        '201':
+          description: Successfully added a note in list of notes
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  date:
+                    type: string
+                  content:
+                    type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                  status:
+                    type: string
+                  error:
+                    type: string
+                  path:
+                    type: string
+  /{id}:
+    get:
+      description: "Rtrieve note's data from his unique id"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully returned a note
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  date:
+                    type: string
+                  content:
+                    type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                  status:
+                    type: string
+                  error:
+                    type: string
+                  path:
+                    type: string
+    delete:
+      description: "Delete data from his unique id"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully deleted a note
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  date:
+                    type: string
+                  content:
+                    type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                  status:
+                    type: string
+                  error:
+                    type: string
+                  path:
+                    type: string
+  /updateNote:
+    put: 
+      description: "Update note's data from his unique id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  content:
+                    type: string
+      responses:
+        '201':
+          description: Successfully updated a note
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  date:
+                    type: string
+                  content:
+                    type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                  status:
+                    type: string
+                  error:
+                    type: string
+                  path:
+                    type: string
+        '401':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                  status:
+                    type: string
+                  error:
+                    type: string
+                  path:
+                    type: string

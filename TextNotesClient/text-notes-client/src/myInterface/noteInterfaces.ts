@@ -1,7 +1,7 @@
 export interface NoteItemProps {
 
-    content: string | null,
-    title: string | null,
+    content: string | undefined,
+    title: string | undefined,
     data?: string | null,
     myOnClick: () => void,
     deleteNote: () => void
